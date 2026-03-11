@@ -1,25 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <ul>
-        {% for genre in genres %}
-            <a href="/genre_books/{{genre}}">{{ genre }}</a>
-        {% endfor %}
-    </ul>
-    <ul>
-        {% for author in authors %}
-            <p>{{ author }}</p>
-        {% endfor %}
-    </ul>
+    <a href="{% url 'book-create' %}">+ Neues Buch</a>
     <ul>
         {% for book in books %}
-            <li style="display: flex; flex-direction: row; gap: 60px">
-                <span>{{ book.title }}</span>
-                <span>{{ book.author_key }}</span>
-                <span>Erschienen: {{ book.published_date }}</span>
-                {% if book.pages > 500 %}
-                    <span>(Ein dicker Schinken!)</span>
-                {% endif %}
+            <li>
+                <a href="{% url 'book-detail' book.pk %}" style="display: flex; flex-direction: row; gap: 60px">
+                    <span>{{ book.title }}</span>
+                    <span>{{ book.author_key }}</span>
+                    <span>Erschienen: {{ book.published_date }}</span>
+                    {% if book.pages > 500 %}
+                        <span>(Ein dicker Schinken!)</span>
+                    {% endif %}
+                </a>
             </li>
         {% empty %}
             <li>Noch keine Bücher vorhanden.</li>

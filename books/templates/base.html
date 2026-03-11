@@ -5,7 +5,14 @@
         <title>Title</title>
     </head>
     <body>
-        <nav>... Navigation ...</nav>
+        <nav>
+            {% if user.is_authenticated %}
+                <span>Hallo, {{ user.username }}</span>
+                <a href="{% url 'admin:logout' %}">Ausloggen</a>
+            {% else %}
+                <a href="{% url 'admin:login' %}">Einloggen</a>
+            {% endif %}
+        </nav>
 
         <main>
             {% block content %}

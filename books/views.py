@@ -1,21 +1,13 @@
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 import copy
+
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
+
 from . import models
-
-def book_list(request):
-    all_books = models.Book.objects.all()
-    all_genres = models.Genre.objects.all()
-    authors = [b.author_key for b in all_books]
-    unique_authors = set(authors)
-    genre_names = [genre.name.upper() for genre in all_genres]
-
-    formated_books = []
-    for book in all_books:
-        formated_book = book
-        formated_book.published_date = formated_book.published_date.strftime('%d.%m.%Y')
-        formated_books.append(formated_book)
-
-    return render(request, 'books/book_list.html', {'books':formated_books, 'genres':genre_names, 'authors':unique_authors})
+from .forms import BookForm
 
 def calc_reading_time(book):
     try:
@@ -27,15 +19,42 @@ def calc_reading_time(book):
     except Exception as e:
         return f'Fehler: {e}'
 
-def book_detail(request, pk):
-    book = models.Book.objects.get(pk=pk)
+class BookListView(ListView):
+    model = models.Book
+    context_object_name = 'books'
 
-    book_new = copy.deepcopy(book)
-    book_new.reading_time = calc_reading_time(book)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for book in context['books']:
+            book.reading_time = calc_reading_time(book)
+        return context
 
-    return render(request, 'books/book_detail.html', {'book':book_new})
+class BookDetailView(DetailView):
+    model = models.Book
+    context_object_name = 'book'
 
-def genre_detail(request, genre_name):
-    genre_books = models.Book.objects.filter(genre__name__icontains=genre_name).distinct()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book = context['book']
+        book.reading_time = calc_reading_time(book)
+        return context
 
-    return render(request, 'books/genre_detail.html', {'books':genre_books})
+class CreateBookView(CreateView):
+    model = models.Book
+    form_class = BookForm
+
+    def get_success_url(self):
+        return reverse('book-detail', kwargs={'pk': self.object.pk})
+
+class UpdateBookView(UpdateView):
+    model = models.Book
+    form_class = BookForm
+
+    def get_success_url(self):
+        return reverse('book-detail', kwargs={'pk': self.object.pk})
+
+class DeleteBookView(DeleteView):
+    model = models.Book
+
+    def get_success_url(self):
+        return reverse('book-list')
