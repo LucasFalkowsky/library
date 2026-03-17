@@ -24,5 +24,7 @@ class Book(models.Model):
     genre = models.ManyToManyField(Genre, blank=True)
     isbn = models.IntegerField()
 
+    cover = models.ImageField(upload_to='covers/', null=True, blank=True)
+
     def __str__(self):
         return f'{self.title} von {self.author_key}'

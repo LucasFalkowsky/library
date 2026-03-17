@@ -1,0 +1,33 @@
+nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#logo {
+    width: 150px;
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+}
+.book-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
+    overflow: hidden;
+    transition: transform .2s;
+}
+.book-card:hover { transform: translateY(-4px); }
+.book-card img {
+    width: 100%;
+    aspect-ratio: 1/1; /* Buchformat */
+    object-fit: cover;
+}
+.featured {
+    background: #aa0000;
+}

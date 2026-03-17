@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <a>{{book}}</a>
-    <h1>{{book.title}}</h1>
-    <h2>{{book.author}}</h2>
-    <p><em>{{book.reading_time}}</em></p>
-    <a href="{% url 'book-list' %}">Zurück</a>
-    <a href="{% url 'book-update' book.pk %}">Aktualisieren</a>
-    <a href="{% url 'book-delete' book.pk %}">Löschen</a>
+    {% with reading_time=book.reading_time|add:" Stunden" %}
+        <a>{{book}}</a>
+        <h1>{{book.title}}</h1>
+        <h2>{{book.author}}</h2>
+        <p><em>{{reading_time}}</em></p>
+        <meta name="duration" content="{{reading_time}}" />
+        <a href="{% url 'book-list' %}">Zurück</a>
+        <a href="{% url 'book-update' book.pk %}">Aktualisieren</a>
+        <a href="{% url 'book-delete' book.pk %}">Löschen</a>
+    {% endwith %}
 {% endblock %}

@@ -1,21 +1,25 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     <a href="{% url 'book-create' %}">+ Neues Buch</a>
-    <ul>
+    <div class="book-grid">
         {% for book in books %}
-            <li>
-                <a href="{% url 'book-detail' book.pk %}" style="display: flex; flex-direction: row; gap: 60px">
-                    <span>{{ book.title }}</span>
-                    <span>{{ book.author_key }}</span>
-                    <span>Erschienen: {{ book.published_date }}</span>
-                    {% if book.pages > 500 %}
-                        <span>(Ein dicker Schinken!)</span>
-                    {% endif %}
-                </a>
-            </li>
+            <a class="book-card {% if forloop.first %}featured{% endif %}" href="{% url 'book-detail' book.pk %}">
+                {% if book.cover %}
+                    <img alt="Cover" src="{{ book.cover.url }}" />
+                {% else %}
+                    <img alt="Logo" src="{% static 'images/augsburg-city-library.png' %}" />
+                {% endif %}
+                <strong>#{{ forloop.counter }}</strong>
+                <h3>{{ book.title }}</h3>
+                <p>{{ book.author_key }}</p>
+            </a>
+            {% if not forloop.last %}
+                <hr>
+            {% endif %}
         {% empty %}
             <li>Noch keine Bücher vorhanden.</li>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}

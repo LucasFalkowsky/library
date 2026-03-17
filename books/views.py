@@ -11,7 +11,7 @@ from .forms import BookForm
 
 def calc_reading_time(book):
     try:
-        return f'{round(book.pages / 30, 1)} Stunden'
+        return f'{round(book.pages / 30, 1)}'
     except ZeroDivisionError:
         return 'Keine Lesedauer angegeben'
     except TypeError:

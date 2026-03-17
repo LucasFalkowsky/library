@@ -1,11 +1,15 @@
 <!DOCTYPE html>
+{% load static %}
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
+        <title>Library</title>
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     </head>
     <body>
         <nav>
+            <img id="logo" class="logo-img" alt="Logo" src="{% static 'images/augsburg-city-library.png' %}" />
             {% if user.is_authenticated %}
                 <span>Hallo, {{ user.username }}</span>
                 <a href="{% url 'admin:logout' %}">Ausloggen</a>
